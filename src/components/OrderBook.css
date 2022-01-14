@@ -46,13 +46,14 @@
     color: var(--gray);
     display: none;
     margin: 4px 0;
+    text-align: center;
 }
 
 .OrderBook .Button {
     margin: 12px auto;
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 600px) {
     .OrderBook .orders {
         flex-direction: column-reverse;
     }

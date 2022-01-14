@@ -28,12 +28,12 @@ export default function OrderBook() {
     const ordersRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (!("resizeObserver" in window)) return;
+        if (!("ResizeObserver" in window)) return;
 
         const resizeObserver = new ResizeObserver((entries) => {
             for (let entry of entries) {
                 const { height } = entry.contentRect;
-                const sm = window.matchMedia("(max-width: 575px)").matches;
+                const sm = window.matchMedia("(max-width: 600px)").matches;
 
                 setOrderBookState(
                     produce((draft) => {

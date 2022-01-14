@@ -52,15 +52,36 @@
     color: var(--green);
 }
 
+.OrdersTable tbody tr:hover {
+    filter: brightness(150%);
+}
+
 .OrdersTable tbody tr {
     background: linear-gradient(
         var(--gradient-dir),
         var(--gradient-color) var(--gradient-width),
-        transparent var(--gradient-width)
+        var(--dark) var(--gradient-width)
     );
+
+    animation: insert-animate 200ms;
 }
 
-@media only screen and (max-width: 575px) {
+@keyframes insert-animate {
+    from {
+        filter: brightness(130%);
+    }
+    to {
+        filter: brightness(100%);
+    }
+}
+
+@media (prefers-reduced-motion) {
+    .OrdersTable tbody tr {
+        animation: none;
+    }
+}
+
+@media only screen and (max-width: 600px) {
     .OrdersTable.asks tbody {
         flex-direction: column-reverse;
     }

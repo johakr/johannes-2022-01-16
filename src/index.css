@@ -1,6 +1,7 @@
 @import-normalize;
 
 :root {
+    --dark: #121724;
     --gray: #37404d;
     --green-bg: #003634;
     --green: #007855;
@@ -13,7 +14,7 @@
 }
 
 body {
-    background-color: #121724;
+    background-color: var(--dark);
     color: whitesmoke;
     font-family: monospace;
     margin: 0;

@@ -1,0 +1,76 @@
+.OrdersTable {
+    text-align: right;
+}
+
+.OrdersTable,
+.OrdersTable tbody,
+.OrdersTable thead {
+    display: flex;
+    flex-direction: column;
+}
+
+.OrdersTable.asks tr {
+    flex-direction: row-reverse;
+}
+
+.OrdersTable.bids tr {
+    flex-direction: row;
+}
+
+.OrdersTable tr {
+    display: flex;
+    width: 100%;
+}
+
+.OrdersTable td,
+.OrdersTable th {
+    display: block;
+    flex: 1 1 33.33%;
+    padding: 4px;
+}
+
+.OrdersTable th {
+    color: var(--gray);
+    text-transform: uppercase;
+}
+
+.OrdersTable.asks {
+    --gradient-color: var(--red-bg);
+    --gradient-dir: to right;
+}
+
+.OrdersTable.asks .price {
+    color: var(--red);
+}
+
+.OrdersTable.bids {
+    --gradient-color: var(--green-bg);
+    --gradient-dir: to left;
+}
+
+.OrdersTable.bids .price {
+    color: var(--green);
+}
+
+.OrdersTable tbody tr {
+    background: linear-gradient(
+        var(--gradient-dir),
+        var(--gradient-color) var(--gradient-width),
+        transparent var(--gradient-width)
+    );
+}
+
+@media only screen and (max-width: 575px) {
+    .OrdersTable.asks tbody {
+        flex-direction: column-reverse;
+    }
+
+    .OrdersTable.bids {
+        --gradient-dir: to right;
+        margin-bottom: auto;
+    }
+
+    .OrdersTable.bids tr {
+        flex-direction: row-reverse;
+    }
+}

@@ -1,0 +1,18 @@
+.Button {
+    background-color: #5b40e1;
+    padding: 12px 24px;
+    border-radius: 6px;
+
+    color: white;
+    cursor: pointer;
+    border: 1px transparent;
+}
+
+.Button:hover {
+    filter: brightness(95%);
+}
+
+.Button:disabled {
+    filter: brightness(70%);
+    cursor: not-allowed;
+}

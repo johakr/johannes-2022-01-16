@@ -1,0 +1,10 @@
+.Notification {
+    align-items: baseline;
+    background-color: #7c2d12;
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

@@ -14,7 +14,7 @@ const initialState: OrderBookState = {
   asks: [],
   bids: [],
   depth: 25,
-  productId: "PI_XBTUSD",
+  productId: ProductId.XBTUSD,
   paused: false,
 };
 

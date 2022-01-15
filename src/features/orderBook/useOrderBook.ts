@@ -37,19 +37,13 @@ export default function useOrderBook() {
       process.env.REACT_APP_ORDERBOOK_WS_URL as string
     );
 
-    ws.current.addEventListener("open", () => {
-      setOpen(true);
-    });
-
-    ws.current.addEventListener("close", () => {
-      setOpen(false);
-    });
+    ws.current.addEventListener("open", () => setOpen(true));
+    ws.current.addEventListener("close", () => setOpen(false));
 
     ws.current.addEventListener("message", ({ data }) => {
-      /* @ts-ignore */
-      const message = JSON.parse(data) as Message | null;
+      const message = JSON.parse(data) as Message;
 
-      if (message?.product_id !== latestProductId.current) return;
+      if (message.product_id !== latestProductId.current) return;
 
       if (message.feed === "book_ui_1_snapshot") {
         dispatch(snapshot(message));

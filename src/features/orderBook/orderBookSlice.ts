@@ -24,7 +24,7 @@ export type OrderBookState = {
   asks: Order[];
   bids: Order[];
   depth: number;
-  productId: string;
+  productId: ProductId;
   paused: boolean;
 };
 
@@ -32,7 +32,7 @@ const initialState: OrderBookState = {
   asks: [],
   bids: [],
   depth: 25,
-  productId: "PI_XBTUSD",
+  productId: ProductId.XBTUSD,
   paused: false,
 };
 

@@ -21,7 +21,7 @@ import {
 export default function OrderBook() {
   useOrderBook();
 
-  const { asks, bids, currency, spread, spreadPercent, paused } =
+  const { asks, bids, currency, spread, spreadPercent, paused, productId } =
     useAppSelector(selectOrderBookWithTotals);
 
   const dispatch = useAppDispatch();
@@ -49,7 +49,7 @@ export default function OrderBook() {
     <>
       <div className="OrderBook">
         <header>
-          <h2>Order Book</h2>
+          <h2 title={productId.replace("PI_", "")}>Order Book</h2>
           <Spread spread={spread} spreadPercent={spreadPercent} />
         </header>
         <div className="orders" ref={ordersRef}>
@@ -61,14 +61,20 @@ export default function OrderBook() {
           />
           <OrdersTable className="asks" orders={asks} currency={currency} />
         </div>
-        <Button disabled={paused} onClick={() => dispatch(toggleFeed())}>
+        <Button
+          disabled={paused}
+          onClick={() => dispatch(toggleFeed())}
+          type="button"
+        >
           Toggle Feed
         </Button>
       </div>
       {paused && (
         <Notification>
           <span>Feed disconnected.</span>
-          <Button onClick={() => dispatch(unpause())}>Reconnect</Button>
+          <Button type="button" onClick={() => dispatch(unpause())}>
+            Reconnect
+          </Button>
         </Notification>
       )}
     </>

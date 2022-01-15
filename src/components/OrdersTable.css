@@ -26,7 +26,20 @@
 .OrdersTable th {
     display: block;
     flex: 1 1 33.33%;
+    overflow: hidden;
     padding: 4px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.OrdersTable.bids td:first-of-type,
+.OrdersTable.bids th:first-of-type {
+    padding-left: 16px;
+}
+
+.OrdersTable.asks td:first-of-type,
+.OrdersTable.asks th:first-of-type {
+    padding-right: 16px;
 }
 
 .OrdersTable th {
@@ -93,5 +106,15 @@
 
     .OrdersTable.bids tr {
         flex-direction: row-reverse;
+    }
+
+    .OrdersTable.bids td:first-of-type,
+    .OrdersTable.bids th:first-of-type {
+        padding-right: 16px;
+    }
+
+    .OrdersTable.bids td:last-of-type,
+    .OrdersTable.bids th:last-of-type {
+        padding-left: 4px;
     }
 }

@@ -1,29 +1,30 @@
 import "./OrderBook.css";
 
-import useOrderBook from "../hooks/useOrderBook";
+import useOrderBook from "./useOrderBook";
 
 import { useEffect, useRef } from "react";
 
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { orderBookState } from "../recoil/atoms";
-import { filteredOrderBookState } from "../recoil/selectors";
+import { numberIntl, percentIntl } from "../../utils/intl";
 
-import produce from "immer";
+import Button from "../../components/Button";
+import Notification from "../../components/Notification";
+import OrdersTable from "./components/OrdersTable";
 
-import { numberIntl, percentIntl } from "../utils/intl";
-
-import Button from "./Button";
-import Notification from "./Notification";
-import OrdersTable from "./OrdersTable";
+import { useAppSelector, useAppDispatch } from "../../app/hooks";
+import {
+  selectOrderBookWithTotals,
+  toggleFeed,
+  calculateDepth,
+  unpause,
+} from "./orderBookSlice";
 
 export default function OrderBook() {
-  const { paused, setPaused, toggleProduct } = useOrderBook();
+  useOrderBook();
 
-  const { asks, bids, spread, spreadPercent } = useRecoilValue(
-    filteredOrderBookState
+  const { asks, bids, spread, spreadPercent, paused } = useAppSelector(
+    selectOrderBookWithTotals
   );
-
-  const setOrderBookState = useSetRecoilState(orderBookState);
+  const dispatch = useAppDispatch();
 
   const ordersRef = useRef<HTMLDivElement>(null);
 
@@ -33,23 +34,16 @@ export default function OrderBook() {
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
         const { height } = entry.contentRect;
-        const sm = window.matchMedia("(max-width: 600px)").matches;
+        const sm = window.matchMedia("(max-width: 767px)").matches;
 
-        setOrderBookState(
-          produce((draft) => {
-            draft.depth = Math.min(
-              Math.floor((height - 12) / 28 / (sm ? 2 : 1)) - 1,
-              25
-            );
-          })
-        );
+        dispatch(calculateDepth({ sm, height }));
       }
     });
 
     if (ordersRef.current) {
       resizeObserver.observe(ordersRef.current);
     }
-  }, [setOrderBookState]);
+  }, [dispatch]);
 
   return (
     <>
@@ -69,14 +63,14 @@ export default function OrderBook() {
           </p>
           <OrdersTable className="asks" orders={asks} />
         </div>
-        <Button disabled={paused} onClick={toggleProduct}>
+        <Button disabled={paused} onClick={() => dispatch(toggleFeed())}>
           Toggle Feed
         </Button>
       </div>
       {paused && (
         <Notification>
-          <span>Order Book Feed is disconnected.</span>
-          <Button onClick={() => setPaused(false)}>Reconnect</Button>
+          <span>Feed disconnected.</span>
+          <Button onClick={() => dispatch(unpause())}>Reconnect</Button>
         </Notification>
       )}
     </>

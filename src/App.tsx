@@ -1,13 +1,7 @@
-import { RecoilRoot } from "recoil";
-
-import OrderBook from "./components/OrderBook";
+import OrderBook from "./features/orderBook/OrderBook";
 
 function App() {
-  return (
-    <RecoilRoot>
-      <OrderBook />
-    </RecoilRoot>
-  );
+  return <OrderBook />;
 }
 
 export default App;

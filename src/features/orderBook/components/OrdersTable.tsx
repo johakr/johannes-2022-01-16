@@ -1,7 +1,7 @@
-import { Order } from "../types";
+import { Order } from "../../../types";
 import "./OrdersTable.css";
 
-import { numberIntl, currencyIntl } from "../utils/intl";
+import { numberIntl, currencyIntl } from "../../../utils/intl";
 
 type OrdersTableProps = {
   orders: Order[];

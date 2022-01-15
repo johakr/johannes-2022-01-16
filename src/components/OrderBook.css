@@ -1,7 +1,7 @@
 .OrderBook {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100%;
     margin: 0 auto;
     max-width: 1024px;
     padding: 12px;
@@ -35,7 +35,7 @@
 .OrderBook .orders {
     display: flex;
     flex-grow: 1;
-    overflow: auto;
+    overflow: hidden;
 }
 
 .OrderBook table {

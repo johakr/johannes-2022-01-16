@@ -13,14 +13,17 @@
     box-sizing: border-box;
 }
 
+html,
+body,
+#root {
+    height: 100%;
+}
+
 body {
     background-color: var(--dark);
     color: whitesmoke;
     font-family: monospace;
     margin: 0;
     font-size: 16px;
-}
-
-#app {
-    display: flex;
+    line-height: 20px;
 }

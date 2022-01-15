@@ -38,7 +38,7 @@ export default function OrderBook() {
                 setOrderBookState(
                     produce((draft) => {
                         draft.depth = Math.min(
-                            Math.floor(height / 26 / (sm ? 2 : 1)) - 1,
+                            Math.floor(height / 28 / (sm ? 2 : 1)) - 1,
                             25
                         );
                     })

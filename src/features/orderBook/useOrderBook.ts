@@ -24,12 +24,6 @@ export default function useOrderBook() {
 
   const ws = useRef<WebSocket | null>();
 
-  const latestProductId = useRef(productId);
-
-  useEffect(() => {
-    latestProductId.current = productId;
-  }, [productId]);
-
   useEffect(() => {
     if (paused) return;
 
@@ -38,12 +32,13 @@ export default function useOrderBook() {
     );
 
     ws.current.addEventListener("open", () => setOpen(true));
-    ws.current.addEventListener("close", () => setOpen(false));
+    ws.current.addEventListener("close", () => {
+      setOpen(false);
+      dispatch(pause());
+    });
 
     ws.current.addEventListener("message", ({ data }) => {
       const message = JSON.parse(data) as Message;
-
-      if (message.product_id !== latestProductId.current) return;
 
       if (message.feed === "book_ui_1_snapshot") {
         dispatch(snapshot(message));
@@ -52,15 +47,15 @@ export default function useOrderBook() {
       }
     });
 
-    return () => {
-      ws.current?.close();
-    };
+    const { current } = ws;
+
+    return () => current.close();
   }, [dispatch, paused]);
 
   useEffect(() => {
     if (paused || !open || ws.current?.readyState !== WebSocket.OPEN) return;
 
-    ws.current?.send(
+    ws.current.send(
       JSON.stringify({
         event: "subscribe",
         feed: "book_ui_1",
@@ -68,8 +63,10 @@ export default function useOrderBook() {
       })
     );
 
+    const { current } = ws;
+
     return () => {
-      if (ws.current?.readyState === WebSocket.OPEN) {
+      if (current.readyState === WebSocket.OPEN) {
         ws.current?.send(
           JSON.stringify({
             event: "unsubscribe",
@@ -84,14 +81,13 @@ export default function useOrderBook() {
   useEffect(() => {
     if (paused) {
       ws.current?.close();
-      ws.current = null;
     }
   }, [paused]);
 
   useEffect(() => {
     function handleVisibilityChange() {
       if (document.hidden) {
-        dispatch(pause());
+        ws.current?.close();
       }
     }
 

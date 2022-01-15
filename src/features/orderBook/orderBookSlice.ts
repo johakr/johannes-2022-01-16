@@ -18,6 +18,7 @@ export enum ProductId {
 export type OrderMessage = {
   asks: OrderTuple[];
   bids: OrderTuple[];
+  product_id: ProductId;
 };
 
 export type OrderBookState = {
@@ -46,10 +47,14 @@ export const orderBookSlice = createSlice({
   initialState,
   reducers: {
     snapshot: (state, action: PayloadAction<OrderMessage>) => {
+      if (action.payload.product_id !== state.productId) return;
+
       state.asks = action.payload.asks.map(mapOrder);
       state.bids = action.payload.bids.map(mapOrder);
     },
     delta: (state, action: PayloadAction<OrderMessage>) => {
+      if (action.payload.product_id !== state.productId) return;
+
       const types: readonly ("asks" | "bids")[] = ["asks", "bids"];
 
       types.forEach((type) => {

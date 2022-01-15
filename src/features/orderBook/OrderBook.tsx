@@ -54,11 +54,13 @@ export default function OrderBook() {
         </header>
         <div className="orders" ref={ordersRef}>
           <OrdersTable className="bids" orders={bids} currency={currency} />
-          <Spread
-            className="inner"
-            spread={spread}
-            spreadPercent={spreadPercent}
-          />
+          {spread > 0 && (
+            <Spread
+              className="inner"
+              spread={spread}
+              spreadPercent={spreadPercent}
+            />
+          )}
           <OrdersTable className="asks" orders={asks} currency={currency} />
         </div>
         <Button

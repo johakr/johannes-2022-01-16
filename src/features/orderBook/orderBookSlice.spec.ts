@@ -71,6 +71,7 @@ describe("orderBook reducer", () => {
             [7, 0],
             [6, 0],
           ],
+          product_id: ProductId.XBTUSD,
         })
       );
 
@@ -87,6 +88,7 @@ describe("orderBook reducer", () => {
         delta({
           asks: [[11, 100]],
           bids: [[7, 200]],
+          product_id: ProductId.XBTUSD,
         })
       );
 
@@ -103,6 +105,7 @@ describe("orderBook reducer", () => {
         delta({
           asks: [[11.5, 100]],
           bids: [[6, 100]],
+          product_id: ProductId.XBTUSD,
         })
       );
 
@@ -111,6 +114,20 @@ describe("orderBook reducer", () => {
 
       expect(actual.asks[2].price).toBe(11.5);
       expect(actual.bids[3].price).toBe(6);
+    });
+
+    it("ignores delta with wrong productId", () => {
+      const actual = orderBookReducer(
+        initialState,
+        delta({
+          asks: [[11.5, 100]],
+          bids: [[6, 100]],
+          product_id: ProductId.ETHUSD,
+        })
+      );
+
+      expect(actual.asks).toEqual(initialState.asks);
+      expect(actual.bids).toEqual(initialState.bids);
     });
   });
 
@@ -131,6 +148,7 @@ describe("orderBook reducer", () => {
           [6, 20],
           [5, 30],
         ],
+        product_id: ProductId.XBTUSD,
       })
     );
 
@@ -142,6 +160,20 @@ describe("orderBook reducer", () => {
       { price: 6, size: 20 },
       { price: 5, size: 30 },
     ]);
+  });
+
+  it("ignores snapshot with wrong productId", () => {
+    const actual = orderBookReducer(
+      initialState,
+      snapshot({
+        asks: [],
+        bids: [],
+        product_id: ProductId.ETHUSD,
+      })
+    );
+
+    expect(actual.asks).toEqual(initialState.asks);
+    expect(actual.bids).toEqual(initialState.bids);
   });
 
   it("should handle toggleFeed", () => {

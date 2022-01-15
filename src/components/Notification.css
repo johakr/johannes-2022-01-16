@@ -1,6 +1,6 @@
 .Notification {
   align-items: baseline;
-  background-color: #7c2d12;
+  background-color: var(--warning);
   display: flex;
   justify-content: space-between;
   padding: 12px;

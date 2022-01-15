@@ -1,13 +1,20 @@
-import { Order } from "../../../types";
+import { Order } from "../orderBookSlice";
 import "./OrdersTable.css";
 
-import { numberIntl, currencyIntl } from "../../../utils/intl";
+import { useIntl } from "react-intl";
 
 type OrdersTableProps = {
+  currency: string;
   orders: Order[];
 } & React.HtmlHTMLAttributes<HTMLTableElement>;
 
-export default function OrdersTable({ className, orders }: OrdersTableProps) {
+export default function OrdersTable({
+  className,
+  currency,
+  orders,
+}: OrdersTableProps) {
+  const { formatNumber } = useIntl();
+
   return (
     <table className={`OrdersTable ${className}`}>
       <thead>
@@ -27,9 +34,14 @@ export default function OrdersTable({ className, orders }: OrdersTableProps) {
               } as React.CSSProperties
             }
           >
-            <td className="total">{numberIntl.format(order.total ?? 0)}</td>
-            <td className="size">{numberIntl.format(order.size)}</td>
-            <td className="price">{currencyIntl.format(order.price)}</td>
+            <td className="total">{formatNumber(order.total ?? 0)}</td>
+            <td className="size">{formatNumber(order.size)}</td>
+            <td className="price">
+              {formatNumber(order.price, {
+                currency: currency,
+                style: "currency",
+              })}
+            </td>
           </tr>
         ))}
       </tbody>

@@ -1,16 +1,34 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { OrderTuple, Order, ProductId } from "../../types";
 import { ReadyState } from "react-use-websocket";
 
-export interface OrderBookState {
-  asks: any[];
-  bids: any[];
+export type OrderTuple = [price: number, size: number];
+
+export type Order = {
+  price: number;
+  size: number;
+  total?: number;
+  totalPercent?: number;
+};
+
+export enum ProductId {
+  XBTUSD = "PI_XBTUSD",
+  ETHUSD = "PI_ETHUSD",
+}
+
+export type OrderMessage = {
+  asks: OrderTuple[];
+  bids: OrderTuple[];
+};
+
+export type OrderBookState = {
+  asks: Order[];
+  bids: Order[];
   depth: number;
   productId: string;
   paused: boolean;
   readyState: ReadyState;
-}
+};
 
 const initialState: OrderBookState = {
   asks: [],
@@ -30,15 +48,15 @@ export const orderBookSlice = createSlice({
   name: "orderBook",
   initialState,
   reducers: {
-    snapshot: (state, action: PayloadAction<{ asks: any[]; bids: any[] }>) => {
+    snapshot: (state, action: PayloadAction<OrderMessage>) => {
       state.asks = action.payload.asks.map(mapOrder);
       state.bids = action.payload.bids.map(mapOrder);
     },
-    delta: (state, action: PayloadAction<{ asks: any[]; bids: any[] }>) => {
+    delta: (state, action: PayloadAction<OrderMessage>) => {
       const types: readonly ("asks" | "bids")[] = ["asks", "bids"];
 
       types.forEach((type) => {
-        (action.payload[type] ?? []).map(mapOrder).forEach((order: Order) => {
+        action.payload[type].map(mapOrder).forEach((order: Order) => {
           const existingIdx = state[type].findIndex(
             (o) => order.price === o.price
           );
@@ -121,7 +139,9 @@ export const selectOrderBookWithTotals = ({ orderBook }: RootState) => {
   const spread = (asks[0]?.price ?? 0) - (bids[0]?.price ?? 0);
   const spreadPercent = spread / (asks[0]?.price ?? 1);
 
-  return { ...orderBook, asks, bids, spread, spreadPercent };
+  const currency = orderBook.productId.slice(-3);
+
+  return { ...orderBook, asks, bids, spread, spreadPercent, currency };
 };
 
 export default orderBookSlice.reducer;

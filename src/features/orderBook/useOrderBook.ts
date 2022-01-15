@@ -8,7 +8,14 @@ import {
   selectOrderBook,
   pause,
   readyStateChange,
+  ProductId,
+  OrderMessage,
 } from "./orderBookSlice";
+
+type Message = {
+  product_id: ProductId;
+  feed: "book_ui_1_snapshot" | "book_ui_1";
+} & OrderMessage;
 
 export default function useOrderBook() {
   const { productId, paused } = useAppSelector(selectOrderBook);
@@ -25,12 +32,14 @@ export default function useOrderBook() {
   }, [dispatch, readyState]);
 
   useEffect(() => {
-    if (lastJsonMessage?.product_id !== productId) return;
+    const message = lastJsonMessage as Message | null;
 
-    if (lastJsonMessage.feed === "book_ui_1_snapshot") {
-      dispatch(snapshot(lastJsonMessage));
-    } else if (lastJsonMessage.feed === "book_ui_1") {
-      dispatch(delta(lastJsonMessage));
+    if (message?.product_id !== productId) return;
+
+    if (message.feed === "book_ui_1_snapshot") {
+      dispatch(snapshot(message));
+    } else if (message.feed === "book_ui_1") {
+      dispatch(delta(message));
     }
   }, [lastJsonMessage, dispatch, productId]);
 

@@ -1,14 +1,14 @@
 import "./OrderBook.css";
 
-import useOrderBook from "./useOrderBook";
-
 import { useEffect, useRef } from "react";
 
-import { numberIntl, percentIntl } from "../../utils/intl";
+import useOrderBook from "./useOrderBook";
+
+import OrdersTable from "./components/OrdersTable";
+import Spread from "./components/Spread";
 
 import Button from "../../components/Button";
 import Notification from "../../components/Notification";
-import OrdersTable from "./components/OrdersTable";
 
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import {
@@ -21,9 +21,9 @@ import {
 export default function OrderBook() {
   useOrderBook();
 
-  const { asks, bids, spread, spreadPercent, paused } = useAppSelector(
-    selectOrderBookWithTotals
-  );
+  const { asks, bids, currency, spread, spreadPercent, paused } =
+    useAppSelector(selectOrderBookWithTotals);
+
   const dispatch = useAppDispatch();
 
   const ordersRef = useRef<HTMLDivElement>(null);
@@ -50,18 +50,16 @@ export default function OrderBook() {
       <div className="OrderBook">
         <header>
           <h2>Order Book</h2>
-          <p>
-            Spread: {numberIntl.format(spread)} (
-            {percentIntl.format(spreadPercent)})
-          </p>
+          <Spread spread={spread} spreadPercent={spreadPercent} />
         </header>
         <div className="orders" ref={ordersRef}>
-          <OrdersTable className="bids" orders={bids} />
-          <p className="inner">
-            Spread: {numberIntl.format(spread)} (
-            {percentIntl.format(spreadPercent)})
-          </p>
-          <OrdersTable className="asks" orders={asks} />
+          <OrdersTable className="bids" orders={bids} currency={currency} />
+          <Spread
+            className="inner"
+            spread={spread}
+            spreadPercent={spreadPercent}
+          />
+          <OrdersTable className="asks" orders={asks} currency={currency} />
         </div>
         <Button disabled={paused} onClick={() => dispatch(toggleFeed())}>
           Toggle Feed

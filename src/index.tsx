@@ -5,11 +5,14 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
+import { IntlProvider } from "react-intl";
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <IntlProvider locale="en">
+        <App />
+      </IntlProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

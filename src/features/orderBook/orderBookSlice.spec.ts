@@ -4,7 +4,6 @@ import orderBookReducer, {
   calculateDepth,
   delta,
   pause,
-  readyStateChange,
   selectOrderBookWithTotals,
   snapshot,
   toggleFeed,
@@ -17,7 +16,6 @@ const initialState: OrderBookState = {
   depth: 25,
   productId: "PI_XBTUSD",
   paused: false,
-  readyState: -1,
 };
 
 const initialStateWithOffers: OrderBookState = {
@@ -119,11 +117,6 @@ describe("orderBook reducer", () => {
   it("should handle pause", () => {
     const actual = orderBookReducer(initialState, pause());
     expect(actual.paused).toEqual(true);
-  });
-
-  it("should handle readyStateChange", () => {
-    const actual = orderBookReducer(initialState, readyStateChange(1));
-    expect(actual.readyState).toEqual(1);
   });
 
   it("should handle snapshot", () => {

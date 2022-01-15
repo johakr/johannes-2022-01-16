@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { ReadyState } from "react-use-websocket";
 
 export type OrderTuple = [price: number, size: number];
 
@@ -27,7 +26,6 @@ export type OrderBookState = {
   depth: number;
   productId: string;
   paused: boolean;
-  readyState: ReadyState;
 };
 
 const initialState: OrderBookState = {
@@ -36,7 +34,6 @@ const initialState: OrderBookState = {
   depth: 25,
   productId: "PI_XBTUSD",
   paused: false,
-  readyState: ReadyState.UNINSTANTIATED,
 };
 
 const mapOrder = ([price, size]: OrderTuple): Order => ({
@@ -101,23 +98,11 @@ export const orderBookSlice = createSlice({
     unpause: (state) => {
       state.paused = false;
     },
-    readyStateChange: (state, action: PayloadAction<ReadyState>) => {
-      state.readyState = action.payload;
-    },
   },
 });
 
-export const {
-  calculateDepth,
-  delta,
-  pause,
-  readyStateChange,
-  snapshot,
-  toggleFeed,
-  unpause,
-} = orderBookSlice.actions;
-
-export const selectOrderBook = (state: RootState) => state.orderBook;
+export const { calculateDepth, delta, pause, snapshot, toggleFeed, unpause } =
+  orderBookSlice.actions;
 
 export const selectOrderBookWithTotals = ({ orderBook }: RootState) => {
   const asks = orderBook.asks.slice(0, orderBook.depth).map((o) => ({ ...o }));

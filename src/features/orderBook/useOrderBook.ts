@@ -1,13 +1,10 @@
-import { useEffect } from "react";
-import useWebSocket from "react-use-websocket";
+import { useEffect, useRef, useState } from "react";
 
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import {
   delta,
   snapshot,
-  selectOrderBook,
   pause,
-  readyStateChange,
   ProductId,
   OrderMessage,
 } from "./orderBookSlice";
@@ -18,48 +15,84 @@ type Message = {
 } & OrderMessage;
 
 export default function useOrderBook() {
-  const { productId, paused } = useAppSelector(selectOrderBook);
+  const paused = useAppSelector(({ orderBook }) => orderBook.paused);
+  const productId = useAppSelector(({ orderBook }) => orderBook.productId);
+
   const dispatch = useAppDispatch();
 
-  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
-    process.env.REACT_APP_ORDERBOOK_WS_URL as string,
-    undefined,
-    !paused
-  );
+  const [open, setOpen] = useState(false);
+
+  const ws = useRef<WebSocket | null>();
+
+  const latestProductId = useRef(productId);
 
   useEffect(() => {
-    dispatch(readyStateChange(readyState));
-  }, [dispatch, readyState]);
-
-  useEffect(() => {
-    const message = lastJsonMessage as Message | null;
-
-    if (message?.product_id !== productId) return;
-
-    if (message.feed === "book_ui_1_snapshot") {
-      dispatch(snapshot(message));
-    } else if (message.feed === "book_ui_1") {
-      dispatch(delta(message));
-    }
-  }, [lastJsonMessage, dispatch, productId]);
+    latestProductId.current = productId;
+  }, [productId]);
 
   useEffect(() => {
     if (paused) return;
 
-    sendJsonMessage({
-      event: "subscribe",
-      feed: "book_ui_1",
-      product_ids: [productId],
+    ws.current = new WebSocket(
+      process.env.REACT_APP_ORDERBOOK_WS_URL as string
+    );
+
+    ws.current.addEventListener("open", () => {
+      setOpen(true);
+    });
+
+    ws.current.addEventListener("close", () => {
+      setOpen(false);
+    });
+
+    ws.current.addEventListener("message", ({ data }) => {
+      /* @ts-ignore */
+      const message = JSON.parse(data) as Message | null;
+
+      if (message?.product_id !== latestProductId.current) return;
+
+      if (message.feed === "book_ui_1_snapshot") {
+        dispatch(snapshot(message));
+      } else if (message.feed === "book_ui_1") {
+        dispatch(delta(message));
+      }
     });
 
     return () => {
-      sendJsonMessage({
-        event: "unsubscribe",
+      ws.current?.close();
+    };
+  }, [dispatch, paused]);
+
+  useEffect(() => {
+    if (paused || !open || ws.current?.readyState !== WebSocket.OPEN) return;
+
+    ws.current?.send(
+      JSON.stringify({
+        event: "subscribe",
         feed: "book_ui_1",
         product_ids: [productId],
-      });
+      })
+    );
+
+    return () => {
+      if (ws.current?.readyState === WebSocket.OPEN) {
+        ws.current?.send(
+          JSON.stringify({
+            event: "unsubscribe",
+            feed: "book_ui_1",
+            product_ids: [productId],
+          })
+        );
+      }
     };
-  }, [productId, paused, sendJsonMessage]);
+  }, [productId, paused, open]);
+
+  useEffect(() => {
+    if (paused) {
+      ws.current?.close();
+      ws.current = null;
+    }
+  }, [paused]);
 
   useEffect(() => {
     function handleVisibilityChange() {

@@ -10,7 +10,7 @@ import Spread from "./components/Spread";
 import Button from "../../components/Button";
 import Notification from "../../components/Notification";
 
-import { useAppSelector, useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   selectOrderBookWithTotals,
   toggleFeed,

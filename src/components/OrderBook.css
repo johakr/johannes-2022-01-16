@@ -1,74 +1,74 @@
 .OrderBook {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    margin: 0 auto;
-    max-width: 1024px;
-    padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin: 0 auto;
+  max-width: 1024px;
+  padding: 12px 0;
 }
 
 .OrderBook header {
-    align-items: baseline;
-    border-bottom: 1px solid var(--gray);
-    display: flex;
-    flex-shrink: 0;
+  align-items: baseline;
+  border-bottom: 1px solid var(--gray);
+  display: flex;
+  flex-shrink: 0;
 }
 
 .OrderBook header h2 {
-    flex: 1;
-    font-size: 18px;
-    font-weight: normal;
-    margin: 0 0 6px 12px;
-    text-align: left;
+  flex: 1;
+  font-size: 18px;
+  font-weight: normal;
+  margin: 0 0 6px 12px;
+  text-align: left;
 }
 
 .OrderBook header p {
-    color: var(--gray);
-    margin: 6px 0;
+  color: var(--gray);
+  margin: 6px 0;
 }
 
 .OrderBook header::after {
-    content: "";
-    flex: 1;
+  content: "";
+  flex: 1;
 }
 
 .OrderBook .orders {
-    display: flex;
-    flex-grow: 1;
-    overflow: hidden;
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
 }
 
 .OrderBook table {
-    width: 50%;
+  width: 50%;
 }
 
 .OrderBook .inner {
-    color: var(--gray);
-    display: none;
-    margin: 4px 0;
-    text-align: center;
+  color: var(--gray);
+  display: none;
+  margin: 4px 0;
+  text-align: center;
 }
 
 .OrderBook .Button {
-    margin: 0 auto;
+  margin: 0 auto;
 }
 
 @media only screen and (max-width: 600px) {
-    .OrderBook .orders {
-        flex-direction: column-reverse;
-    }
+  .OrderBook .orders {
+    flex-direction: column-reverse;
+  }
 
-    .OrderBook table {
-        width: 100%;
-    }
+  .OrderBook table {
+    width: 100%;
+  }
 
-    .OrderBook header p,
-    .OrderBook header::after,
-    .OrderBook .bids thead {
-        display: none;
-    }
+  .OrderBook header p,
+  .OrderBook header::after,
+  .OrderBook .bids thead {
+    display: none;
+  }
 
-    .OrderBook .inner {
-        display: block;
-    }
+  .OrderBook .inner {
+    display: block;
+  }
 }

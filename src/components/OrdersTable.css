@@ -1,120 +1,120 @@
 .OrdersTable {
-    text-align: right;
+  text-align: right;
 }
 
 .OrdersTable,
 .OrdersTable tbody,
 .OrdersTable thead {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .OrdersTable.asks tr {
-    flex-direction: row-reverse;
+  flex-direction: row-reverse;
 }
 
 .OrdersTable.bids tr {
-    flex-direction: row;
+  flex-direction: row;
 }
 
 .OrdersTable tr {
-    display: flex;
-    width: 100%;
+  display: flex;
+  width: 100%;
 }
 
 .OrdersTable td,
 .OrdersTable th {
-    display: block;
-    flex: 1 1 33.33%;
-    overflow: hidden;
-    padding: 4px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  display: block;
+  flex: 1 1 33.33%;
+  overflow: hidden;
+  padding: 4px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .OrdersTable.bids td:first-of-type,
 .OrdersTable.bids th:first-of-type {
-    padding-left: 16px;
+  padding-left: 16px;
 }
 
 .OrdersTable.asks td:first-of-type,
 .OrdersTable.asks th:first-of-type {
-    padding-right: 16px;
+  padding-right: 16px;
 }
 
 .OrdersTable th {
-    color: var(--gray);
-    text-transform: uppercase;
+  color: var(--gray);
+  text-transform: uppercase;
 }
 
 .OrdersTable.asks {
-    --gradient-color: var(--red-bg);
-    --gradient-dir: to right;
+  --gradient-color: var(--red-bg);
+  --gradient-dir: to right;
 }
 
 .OrdersTable.asks .price {
-    color: var(--red);
+  color: var(--red);
 }
 
 .OrdersTable.bids {
-    --gradient-color: var(--green-bg);
-    --gradient-dir: to left;
+  --gradient-color: var(--green-bg);
+  --gradient-dir: to left;
 }
 
 .OrdersTable.bids .price {
-    color: var(--green);
+  color: var(--green);
 }
 
 .OrdersTable tbody tr:hover {
-    filter: brightness(150%);
+  filter: brightness(150%);
 }
 
 .OrdersTable tbody tr {
-    background: linear-gradient(
-        var(--gradient-dir),
-        var(--gradient-color) var(--gradient-width),
-        var(--dark) var(--gradient-width)
-    );
+  background: linear-gradient(
+    var(--gradient-dir),
+    var(--gradient-color) var(--gradient-width),
+    var(--dark) var(--gradient-width)
+  );
 
-    animation: insert-animate 200ms;
+  animation: insert-animate 200ms;
 }
 
 @keyframes insert-animate {
-    from {
-        filter: brightness(130%);
-    }
-    to {
-        filter: brightness(100%);
-    }
+  from {
+    filter: brightness(130%);
+  }
+  to {
+    filter: brightness(100%);
+  }
 }
 
 @media (prefers-reduced-motion) {
-    .OrdersTable tbody tr {
-        animation: none;
-    }
+  .OrdersTable tbody tr {
+    animation: none;
+  }
 }
 
 @media only screen and (max-width: 600px) {
-    .OrdersTable.asks tbody {
-        flex-direction: column-reverse;
-    }
+  .OrdersTable.asks tbody {
+    flex-direction: column-reverse;
+  }
 
-    .OrdersTable.bids {
-        --gradient-dir: to right;
-        margin-bottom: auto;
-    }
+  .OrdersTable.bids {
+    --gradient-dir: to right;
+    margin-bottom: auto;
+  }
 
-    .OrdersTable.bids tr {
-        flex-direction: row-reverse;
-    }
+  .OrdersTable.bids tr {
+    flex-direction: row-reverse;
+  }
 
-    .OrdersTable.bids td:first-of-type,
-    .OrdersTable.bids th:first-of-type {
-        padding-right: 16px;
-    }
+  .OrdersTable.bids td:first-of-type,
+  .OrdersTable.bids th:first-of-type {
+    padding-right: 16px;
+  }
 
-    .OrdersTable.bids td:last-of-type,
-    .OrdersTable.bids th:last-of-type {
-        padding-left: 4px;
-    }
+  .OrdersTable.bids td:last-of-type,
+  .OrdersTable.bids th:last-of-type {
+    padding-left: 4px;
+  }
 }

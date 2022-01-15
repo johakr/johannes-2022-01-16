@@ -16,7 +16,7 @@ export default function useOrderBook() {
     const [{ productId }, setOrderBook] = useRecoilState(orderBookState);
 
     const { sendJsonMessage, lastJsonMessage } = useWebSocket(
-        "wss://www.cryptofacilities.com/ws/v1",
+        process.env.REACT_APP_ORDERBOOK_WS_URL as string,
         undefined,
         !paused
     );

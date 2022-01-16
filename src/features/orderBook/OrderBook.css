@@ -24,7 +24,7 @@
 
 .OrderBook header p {
   color: var(--gray);
-  margin: 6px 0;
+  margin: 0 0 6px 0;
 }
 
 .OrderBook header::after {

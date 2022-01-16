@@ -40,4 +40,6 @@ The Styling lives in plain old CSS files (one per component) and is preprocessed
 
 We have one breakpoint at 768px, which discriminates between the mobile (bids and asks below each other) and desktop (bids and asks next to each other) layout.
 
-The number of levels of the order book is dynamically adjusted to meet the height of the window using ResizeOberver. This is necessary, as we have to recalculate the depth graphs when the number of levels updates.
+The number of levels of the order book is dynamically adjusted to meet the height of the window using ResizeObserver. This is necessary, as we have to recalculate the depth graphs when the number of levels updates.
+
+![Responsiveness Demo](demo.gif)

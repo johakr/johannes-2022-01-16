@@ -19,8 +19,8 @@ Consistent Code Styling is enforced by prettier, eslint & husky.
 ## Test Coverage
 
 - The reducers are unit tested with a code coverage of 100% (`npm test`).
-- The React components are tested with Jest in a JSDOM environment (`npm test`).
-- Critical flows are E2E tested with cypress (`npm run e2e`).
+- The React components are tested with Jest in a JSDOM environment with mocked WS connection (`npm test`).
+- Critical flows are E2E tested with cypress with real WS connection (`npm run e2e`).
 
 ## Optimisations
 

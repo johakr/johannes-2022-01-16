@@ -5,24 +5,17 @@ import {
   waitForElementToBeRemoved,
   fireEvent,
   waitFor,
-} from "@testing-library/react";
-import { Provider } from "react-redux";
-import { IntlProvider } from "react-intl";
+} from "../../test-utils";
+
 import WS from "jest-websocket-mock";
-import { store } from "../../app/store";
+
 import OrderBook from "./OrderBook";
 import { ProductId } from "./orderBookSlice";
 
 let ws = new WS("ws://localhost:3000", { jsonProtocol: true });
 
 it("connects to WS server", async () => {
-  render(
-    <Provider store={store}>
-      <IntlProvider locale="en">
-        <OrderBook />
-      </IntlProvider>
-    </Provider>
-  );
+  render(<OrderBook />);
 
   await ws.connected;
 });

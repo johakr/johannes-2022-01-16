@@ -9,6 +9,7 @@ https://johannes-2022-01-16.vercel.app/
 - React
 - TypeScript
 - Redux & Redux Toolkit
+- React Intl
 - WebSocket
 - ResizeObserver
 - Jest & Cypress

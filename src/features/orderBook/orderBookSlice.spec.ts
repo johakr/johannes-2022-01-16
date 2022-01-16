@@ -1,8 +1,8 @@
 import orderBookReducer, {
   OrderBookState,
   ProductId,
-  calculateDepth,
   delta,
+  levels,
   pause,
   selectOrderBookWithTotals,
   snapshot,
@@ -13,9 +13,9 @@ import orderBookReducer, {
 const initialState: OrderBookState = {
   asks: [],
   bids: [],
-  depth: 25,
-  productId: ProductId.XBTUSD,
+  levels: 25,
   paused: false,
+  productId: ProductId.XBTUSD,
 };
 
 const initialStateWithOffers: OrderBookState = {
@@ -37,13 +37,10 @@ describe("orderBook reducer", () => {
     { height: 600, expected: 9 },
     { height: 1000, expected: 16 },
   ])(
-    "should handle calculateDepth on mobile with height $height",
+    "should handle levels on mobile with height $height",
     ({ height, expected }) => {
-      let actual = orderBookReducer(
-        initialState,
-        calculateDepth({ sm: true, height })
-      );
-      expect(actual.depth).toEqual(expected);
+      let actual = orderBookReducer(initialState, levels({ sm: true, height }));
+      expect(actual.levels).toEqual(expected);
     }
   );
 
@@ -51,13 +48,13 @@ describe("orderBook reducer", () => {
     { height: 600, expected: 20 },
     { height: 1000, expected: 25 },
   ])(
-    "should handle calculateDepth on desktop with height $height",
+    "should handle levels on desktop with height $height",
     ({ height, expected }) => {
       let actual = orderBookReducer(
         initialState,
-        calculateDepth({ sm: false, height })
+        levels({ sm: false, height })
       );
-      expect(actual.depth).toEqual(expected);
+      expect(actual.levels).toEqual(expected);
     }
   );
 

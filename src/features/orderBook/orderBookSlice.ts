@@ -24,15 +24,15 @@ export type OrderMessage = {
 export type OrderBookState = {
   asks: Order[];
   bids: Order[];
-  depth: number;
-  productId: ProductId;
+  levels: number;
   paused: boolean;
+  productId: ProductId;
 };
 
 const initialState: OrderBookState = {
   asks: [],
   bids: [],
-  depth: 25,
+  levels: 25,
   productId: ProductId.XBTUSD,
   paused: false,
 };
@@ -55,9 +55,7 @@ export const orderBookSlice = createSlice({
     delta: (state, action: PayloadAction<OrderMessage>) => {
       if (action.payload.product_id !== state.productId) return;
 
-      const types: readonly ("asks" | "bids")[] = ["asks", "bids"];
-
-      types.forEach((type) => {
+      (["asks", "bids"] as const).forEach((type) => {
         action.payload[type].map(mapOrder).forEach((order: Order) => {
           const existingIdx = state[type].findIndex(
             (o) => order.price === o.price
@@ -86,11 +84,12 @@ export const orderBookSlice = createSlice({
       state.asks = [];
       state.bids = [];
     },
-    calculateDepth: (
-      state,
-      action: PayloadAction<{ sm: boolean; height: number }>
-    ) => {
-      state.depth = Math.min(
+    levels: (state, action: PayloadAction<{ sm: boolean; height: number }>) => {
+      // number of levels is depending on screen height & mobile breakpoint (max 25).
+      // 12: min spacing to bottom.
+      // 28: height of one row.
+      // -1: adjust for heading row.
+      state.levels = Math.min(
         Math.floor(
           (action.payload.height - 12) / 28 / (action.payload.sm ? 2 : 1)
         ) - 1,
@@ -106,26 +105,33 @@ export const orderBookSlice = createSlice({
   },
 });
 
-export const { calculateDepth, delta, pause, snapshot, toggleFeed, unpause } =
+export const { levels, delta, pause, snapshot, toggleFeed, unpause } =
   orderBookSlice.actions;
 
 export const selectOrderBookWithTotals = ({
   orderBook,
 }: Pick<RootState, "orderBook">) => {
-  const asks = orderBook.asks.slice(0, orderBook.depth).map((o) => ({ ...o }));
-  const bids = orderBook.bids.slice(0, orderBook.depth).map((o) => ({ ...o }));
+  const asks = orderBook.asks.slice(0, orderBook.levels);
+  const bids = orderBook.bids.slice(0, orderBook.levels);
 
   const totalAsk = asks.reduce((prev, cur) => prev + cur.size, 0);
   const totalBid = bids.reduce((prev, cur) => prev + cur.size, 0);
 
+  const asksWithTotals: Required<Order>[] = [];
+  const bidsWithTotals: Required<Order>[] = [];
+
   asks.forEach((ask, idx) => {
-    ask.total = (asks[idx - 1]?.total || 0) + ask.size;
-    ask.totalPercent = (ask.total / Math.max(totalAsk, totalBid)) * 100;
+    const total = (asksWithTotals[idx - 1]?.total || 0) + ask.size;
+    const totalPercent = (total / Math.max(totalAsk, totalBid)) * 100;
+
+    asksWithTotals.push({ ...ask, total, totalPercent });
   });
 
   bids.forEach((bid, idx) => {
-    bid.total = (bids[idx - 1]?.total || 0) + bid.size;
-    bid.totalPercent = (bid.total / Math.max(totalAsk, totalBid)) * 100;
+    const total = (bidsWithTotals[idx - 1]?.total || 0) + bid.size;
+    const totalPercent = (total / Math.max(totalAsk, totalBid)) * 100;
+
+    bidsWithTotals.push({ ...bid, total, totalPercent });
   });
 
   const spread = (asks[0]?.price ?? 0) - (bids[0]?.price ?? 0);
@@ -133,7 +139,14 @@ export const selectOrderBookWithTotals = ({
 
   const currency = orderBook.productId.slice(-3);
 
-  return { ...orderBook, asks, bids, spread, spreadPercent, currency };
+  return {
+    ...orderBook,
+    asks: asksWithTotals,
+    bids: bidsWithTotals,
+    spread,
+    spreadPercent,
+    currency,
+  };
 };
 
 export default orderBookSlice.reducer;

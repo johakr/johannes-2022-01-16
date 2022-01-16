@@ -12,9 +12,9 @@ import Notification from "../../components/Notification";
 
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
+  levels,
   selectOrderBookWithTotals,
   toggleFeed,
-  calculateDepth,
   unpause,
 } from "./orderBookSlice";
 
@@ -36,7 +36,7 @@ export default function OrderBook() {
         const { height } = entry.contentRect;
         const sm = window.matchMedia("(max-width: 767px)").matches;
 
-        dispatch(calculateDepth({ sm, height }));
+        dispatch(levels({ sm, height }));
       }
     });
 

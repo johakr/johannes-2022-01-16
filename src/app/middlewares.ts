@@ -4,7 +4,7 @@ import { batch } from "react-redux";
 import { OrderMessage } from "../features/orderBook/orderBookSlice";
 
 let deltaBatch: PayloadAction<OrderMessage>[] = [];
-let timeout: any = null;
+let timeout: ReturnType<typeof setTimeout> | null = null;
 
 // Throttles / batches orderBook delta updates by 100ms.
 // If prefers-reduced-motion is enabled, by 1000ms.

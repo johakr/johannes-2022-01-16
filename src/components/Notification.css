@@ -1,14 +1,15 @@
 .Notification {
-  background-color: var(--warning);
   position: fixed;
   bottom: 0;
-  width: 100%;
+
+  background-color: var(--warning);
   padding: 12px;
+  width: 100%;
 }
 
 .Notification .center {
-  align-items: baseline;
   display: flex;
+  align-items: baseline;
   justify-content: space-between;
   max-width: var(--max-width);
   margin: auto;

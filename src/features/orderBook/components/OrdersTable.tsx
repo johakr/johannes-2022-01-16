@@ -5,7 +5,7 @@ import { useIntl } from "react-intl";
 
 type OrdersTableProps = {
   currency: string;
-  orders: Order[];
+  orders: Required<Order>[];
 } & React.HtmlHTMLAttributes<HTMLTableElement>;
 
 export default function OrdersTable({
@@ -30,11 +30,11 @@ export default function OrdersTable({
             key={order.price}
             style={
               {
-                "--gradient-width": `${order.totalPercent ?? 0}%`,
+                "--gradient-width": `${order.totalPercent}%`,
               } as React.CSSProperties
             }
           >
-            <td className="total">{formatNumber(order.total ?? 0)}</td>
+            <td className="total">{formatNumber(order.total)}</td>
             <td className="size">{formatNumber(order.size)}</td>
             <td className="price">
               {formatNumber(order.price, {

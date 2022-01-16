@@ -1,11 +1,10 @@
 .Button {
   background-color: var(--primary);
-  padding: 12px 24px;
   border-radius: 6px;
-
+  border: 1px transparent;
   color: white;
   cursor: pointer;
-  border: 1px transparent;
+  padding: 12px 24px;
 }
 
 .Button:hover {
@@ -13,6 +12,6 @@
 }
 
 .Button:disabled {
-  filter: brightness(70%);
   cursor: not-allowed;
+  filter: brightness(70%);
 }

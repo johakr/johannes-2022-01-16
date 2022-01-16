@@ -109,7 +109,9 @@ export const orderBookSlice = createSlice({
 export const { calculateDepth, delta, pause, snapshot, toggleFeed, unpause } =
   orderBookSlice.actions;
 
-export const selectOrderBookWithTotals = ({ orderBook }: RootState) => {
+export const selectOrderBookWithTotals = ({
+  orderBook,
+}: Pick<RootState, "orderBook">) => {
   const asks = orderBook.asks.slice(0, orderBook.depth).map((o) => ({ ...o }));
   const bids = orderBook.bids.slice(0, orderBook.depth).map((o) => ({ ...o }));
 

@@ -25,7 +25,9 @@ Consistent Code Styling is enforced by prettier, eslint & husky.
 
 The application is optimised to avoid unnecessary rerenders and therefore is able to render all real-time updates with steady 120 FPS. That is, with CPU throttled to 6x slowdown.
 
-However, `delta` update messages are throttled to batch update every 100ms to make the UI appear less bustling. Batching is implemented with a custom redux middleware [throttleOrderBook](src/app/store.ts).
+However, `delta` update messages are throttled to batch update every 100ms to make the UI appear less bustling. Batching is implemented with a custom redux middleware [throttleOrderBook](src/app/middlewares.ts).
+
+`prefers-reduced-motion` is respected. If the user has enabled `prefers-reduced-motion` the batch interval is increased to 1000ms and transitions for new offers are disabled.
 
 The bid and asks tables are built with actual HTML `table` elements in order to keep the semantics. However, their display is set to `flex`, though. This is mainly because of two reasons:
 

@@ -1,46 +1,43 @@
-# Getting Started with Create React App
+# Order Book
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Responsive Real Time Order Book UI for XBT/USD and ETH/USD.
 
-## Available Scripts
+https://johannes-2022-01-16.vercel.app/
 
-In the project directory, you can run:
+## Technology
 
-### `npm start`
+- React
+- TypeScript
+- Redux & Redux Toolkit
+- WebSocket
+- ResizeObserver
+- Jest & Cypress
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Consistent Code Styling is enforced by prettier, eslint & husky.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Test Coverage
 
-### `npm test`
+- The reducers are unit tested with a code coverage of 100% (`npm test`).
+- The React components are tested with Jest in a JSDOM environment (`npm test`).
+- Critical flows are E2E tested with cypress (`npm run e2e`).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Optimisations
 
-### `npm run build`
+The application is optimised to avoid unnecessary rerenders and therefore is able to render all real-time updates with steady 120 FPS. That is, with CPU throttled to 6x slowdown.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+However, `delta` update messages are throttled to batch update every 100ms to make the UI appear less bustling. Batching is implemented with a custom redux middleware [throttleOrderBook](src/app/store.ts).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The bid and asks tables are built with actual HTML `table` elements in order to keep the semantics. However, their display is set to `flex`, though. This is mainly because of two reasons:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- This weird [Safari Table Row Gradient Background Repeat Bug](https://bugs.webkit.org/show_bug.cgi?id=34392), which would make the implementation of the depth graphs imperformant.
+- Being able to use `flex-direction` to build the mobile layout with just some CSS media queries.
 
-### `npm run eject`
+## CSS Setup
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+The Styling lives in plain old CSS files (one per component) and is preprocessed by PostCSS. The rules are scoped to the component by using a component class. If needed, migration to CSS Modules or SCSS would be seamless (as it's already setup).
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Responsiveness
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+We have one breakpoint at 768px, which discriminates between the mobile (bids and asks below each other) and desktop (bids and asks next to each other) layout.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+The number of levels of the order book is dynamically adjusted to meet the height of the window using ResizeOberver. This is necessary, as we have to recalculate the depth graphs when the number of levels updates.

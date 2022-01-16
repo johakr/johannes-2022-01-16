@@ -12,6 +12,7 @@ import {
 type Message = {
   product_id: ProductId;
   feed: "book_ui_1_snapshot" | "book_ui_1";
+  event?: "subscribed" | "unsubscribed";
 } & OrderMessage;
 
 export default function useOrderBook() {
@@ -42,7 +43,7 @@ export default function useOrderBook() {
 
       if (message.feed === "book_ui_1_snapshot") {
         dispatch(snapshot(message));
-      } else if (message.feed === "book_ui_1") {
+      } else if (message.feed === "book_ui_1" && !message.event) {
         dispatch(delta(message));
       }
     });

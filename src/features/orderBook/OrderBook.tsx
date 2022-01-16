@@ -47,12 +47,12 @@ export default function OrderBook() {
 
   return (
     <>
-      <div className="OrderBook">
+      <section className="OrderBook">
         <header>
           <h2 title={productId.replace("PI_", "")}>Order Book</h2>
           <Spread spread={spread} spreadPercent={spreadPercent} />
         </header>
-        <div className="orders" ref={ordersRef}>
+        <main className="orders" ref={ordersRef}>
           <OrdersTable className="bids" orders={bids} currency={currency} />
           {spread > 0 && (
             <Spread
@@ -62,15 +62,17 @@ export default function OrderBook() {
             />
           )}
           <OrdersTable className="asks" orders={asks} currency={currency} />
-        </div>
-        <Button
-          disabled={paused}
-          onClick={() => dispatch(toggleFeed())}
-          type="button"
-        >
-          Toggle Feed
-        </Button>
-      </div>
+        </main>
+        <footer>
+          <Button
+            disabled={paused}
+            onClick={() => dispatch(toggleFeed())}
+            type="button"
+          >
+            Toggle Feed
+          </Button>
+        </footer>
+      </section>
       {paused && (
         <Notification>
           <span>Feed disconnected.</span>

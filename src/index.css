@@ -9,6 +9,7 @@
   --red: #a11f2d;
   --primary: #5b40e1;
   --warning: #7c2d12;
+  --max-width: 1024px;
 }
 
 * {

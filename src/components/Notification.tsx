@@ -8,7 +8,7 @@ export default function Notification({
 }: NotificationProps) {
   return (
     <div {...props} className="Notification">
-      {children}
+      <div className="center">{children}</div>
     </div>
   );
 }

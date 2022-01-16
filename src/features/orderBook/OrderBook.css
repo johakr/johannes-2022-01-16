@@ -3,7 +3,7 @@
   flex-direction: column;
   height: 100%;
   margin: 0 auto;
-  max-width: 1024px;
+  max-width: var(--max-width);
   padding: 12px 0;
 }
 
@@ -49,7 +49,7 @@
   text-align: center;
 }
 
-.OrderBook .Button {
+.OrderBook footer {
   margin: 0 auto;
 }
 

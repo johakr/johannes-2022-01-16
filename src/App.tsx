@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useAppDispatch } from "./app/hooks";
 
 import OrderBook from "./features/orderBook/OrderBook";
+
 import { setPrefersReducedMotion } from "./features/ui/uiSlice";
 
 function App() {

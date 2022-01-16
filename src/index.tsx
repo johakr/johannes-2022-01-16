@@ -6,14 +6,17 @@ import reportWebVitals from "./reportWebVitals";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 import { IntlProvider } from "react-intl";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <IntlProvider locale="en">
-        <App />
-      </IntlProvider>
-    </Provider>
+    <ErrorBoundary>
+      <Provider store={store}>
+        <IntlProvider locale="en">
+          <App />
+        </IntlProvider>
+      </Provider>
+    </ErrorBoundary>
   </React.StrictMode>,
   document.getElementById("root")
 );

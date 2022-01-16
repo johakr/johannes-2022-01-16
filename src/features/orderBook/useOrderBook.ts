@@ -32,13 +32,17 @@ export default function useOrderBook() {
       process.env.REACT_APP_ORDERBOOK_WS_URL as string
     );
 
-    ws.current.addEventListener("open", () => setOpen(true));
-    ws.current.addEventListener("close", () => {
-      setOpen(false);
-      dispatch(pause());
+    const { current } = ws;
+
+    current.addEventListener("open", () => setOpen(true));
+    current.addEventListener("close", () => {
+      if (ws.current === current) {
+        setOpen(false);
+        dispatch(pause());
+      }
     });
 
-    ws.current.addEventListener("message", ({ data }) => {
+    current.addEventListener("message", ({ data }) => {
       const message = JSON.parse(data) as Message;
 
       if (message.feed === "book_ui_1_snapshot") {
@@ -47,8 +51,6 @@ export default function useOrderBook() {
         dispatch(delta(message));
       }
     });
-
-    const { current } = ws;
 
     return () => current.close();
   }, [dispatch, paused]);
